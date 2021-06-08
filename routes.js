@@ -1,12 +1,13 @@
-import Crawler from 'crawler';
 import twilio from 'twilio';
+import dotenv from 'dotenv';
+import Crawler from 'crawler';
 import Cheerio from 'cheerio';
 import { Router } from 'express';
 
 const routes = Router();
-const client = twilio('AC22d74ad29d606dcb5789bc950a5bb1d2', '05ccbb5c299ea89f816f1b6a79b7cb14');
-// const client = require('twilio')('AC22d74ad29d606dcb5789bc950a5bb1d2', '05ccbb5c299ea89f816f1b6a79b7cb14');
 const cheerio = Cheerio;
+const env = dotenv.config()['parsed'];
+const client = twilio('AC22d74ad29d606dcb5789bc950a5bb1d2', '05ccbb5c299ea89f816f1b6a79b7cb14');
 
 routes.get('/', (req, res) => {
     // testCrawler()
@@ -18,18 +19,12 @@ routes.get('/', (req, res) => {
 
 
 const sendMessage = () => {
-    console.log('Inside message sender...');
+    console.log('Inside message sender...', env);
     client.messages
-    // Sending a SMS using message server
-    // .create({
-    //     body: 'This is a trial message sent from twilio npm.',
-    //     from: '+18187148469',
-    //     to: '+9779807921240'
-    // })
     .create({ 
-        body: 'This is a trial message sent from twilio npm.',
-        from: 'whatsapp:+14155238886',       
-        to: 'whatsapp:+9779807921240' 
+        body: 'This is a trial message sent from twilio npm and env.',
+        from: env.WHATSAPP_SENDER,
+        to: env.WHATSAPP_RECEIVER
       }) 
     .then(message => console.log('Message sent successfully.'))
     .catch(err => console.log('Error while sending message: ', err)).done();
