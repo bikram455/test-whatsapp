@@ -7,7 +7,7 @@ import { Router } from 'express';
 const routes = Router();
 const cheerio = Cheerio;
 const env = dotenv.config()['parsed'];
-const client = twilio('AC22d74ad29d606dcb5789bc950a5bb1d2', '05ccbb5c299ea89f816f1b6a79b7cb14');
+const client = twilio(env.TWILIO_SID, env.TWILIO_TOKEN);
 
 routes.get('/', (req, res) => {
     // testCrawler()
@@ -18,8 +18,7 @@ routes.get('/', (req, res) => {
 });
 
 
-const sendMessage = () => {
-    console.log('Inside message sender...', env);
+const sendMessage = () => {console.log(env)
     client.messages
     .create({ 
         body: 'This is a trial message sent from twilio npm and env.',
@@ -31,7 +30,6 @@ const sendMessage = () => {
 }
 
 const testCrawler = () => {
-    console.log('inside crawler..')
     var c = new Crawler({
         maxConnections : 10,
         callback : function (error, res, done) {
