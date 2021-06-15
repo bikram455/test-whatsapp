@@ -10,15 +10,15 @@ const env = dotenv.config()['parsed'];
 const client = twilio(env.TWILIO_SID, env.TWILIO_TOKEN);
 
 routes.get('/', (req, res) => {
-    // testCrawler()
-    sendMessage();
+    testCrawler()
+    // sendMessage();
     res.send({
         message: 'This is a test web crawler route.'
     });
 });
 
 
-const sendMessage = () => {console.log(env)
+const sendMessage = () => {
     client.messages
     .create({ 
         body: 'This is a trial message sent from twilio npm and env.',
@@ -41,7 +41,11 @@ const testCrawler = () => {
                 const html = cheerio.load(res.body);
                 const links = html('a');
                 links.each((index, element) => {
-                    console.log(`https://hamrobazaar.com/${html(element).attr('href')}`)
+                    const href = html(element).attr('href');
+                    if(href[0] === 'i' && href !== 'index.php') {
+                        const url = (`https://hamrobazaar.com/${html(element).attr('href')}`);
+                        console.log(url);
+                    }
                 });
             }
             done();
